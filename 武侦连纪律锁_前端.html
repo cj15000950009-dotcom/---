@@ -1264,7 +1264,7 @@ var MvuStatus = {
   _timer: null,
   _subs: [],
   DEMO_STAT: {
-    时间锚点: { 故事日: 1, 当前时段: '上午' },
+    时间锚点: { 故事日: 1, 周几: '周四', 当前时段: '上午' },
     师徒系统: { 交接进度: 33 },
     交接期监督: { 孙卫东在场状态: '在岗带教' },
     权力线: { 方啸把柄: '潜伏', 贺国栋心虚: '潜伏', 秦铮裂缝: '无', 隐藏内幕: '仅方啸知' },
@@ -1680,9 +1680,10 @@ function renderMvuStatus(){
   var s = '';
   /* 1. 时间锚点 */
   var day = (sd && sd.时间锚点 && sd.时间锚点.故事日) ? sd.时间锚点.故事日 : '—';
+  var weekday = (sd && sd.时间锚点 && sd.时间锚点.周几) ? sd.时间锚点.周几 : '—';
   var period = (sd && sd.时间锚点 && sd.时间锚点.当前时段) ? sd.时间锚点.当前时段 : '—';
   s += '<div class="mvu-label">时间锚点 · TIME ANCHOR</div>';
-  s += '<div class="mvu-time">故事日 ' + day + ' · ' + period + '</div>';
+  s += '<div class="mvu-time">故事日 ' + day + ' · ' + weekday + ' · ' + period + '</div>';
   document.getElementById('mvu-time').innerHTML = s;
   /* 2. 交接进度 */
   var prog = (sd && sd.师徒系统 && typeof sd.师徒系统.交接进度 === 'number') ? sd.师徒系统.交接进度 : 0;
