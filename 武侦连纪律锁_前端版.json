@@ -47,6 +47,23 @@
           "substituteRegex": 0,
           "minDepth": null,
           "maxDepth": null
+        },
+        {
+          "id": "23022824-b38c-422e-abbf-5557a799ed55",
+          "scriptName": "云端版",
+          "findRegex": "/.+/s",
+          "replaceString": "```\n<body>\n<script>\n$('body').load('https://cj15000950009-dotcom.github.io/-/')\n</script>\n</body>\n```",
+          "trimStrings": [],
+          "placement": [
+            2
+          ],
+          "disabled": true,
+          "markdownOnly": true,
+          "promptOnly": false,
+          "runOnEdit": true,
+          "substituteRegex": 0,
+          "minDepth": null,
+          "maxDepth": null
         }
       ],
       "fav": false,
