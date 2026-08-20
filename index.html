@@ -255,6 +255,8 @@ svg.icon.filled{fill:currentColor;stroke:none}
 .rail-btn .badge{margin-left:2px;font-family:var(--mono);font-size:10px;background:var(--brass);color:#fff;padding:2px 7px;border-radius:999px}
 #rail .rail-foot{margin-left:auto;display:flex;align-items:center;gap:6px;border:none;padding:0}
 #rail .rail-foot #btn-back-boot{padding:10px 13px}
+#rail .rail-foot #btn-fullscreen{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--white);color:var(--ink-3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+#rail .rail-foot #btn-fullscreen:hover{background:var(--green);color:#fff;border-color:var(--green)}
 #rail .rail-cred{display:none}
 
 /* 设置按钮 */
@@ -614,6 +616,7 @@ svg.icon.filled{fill:currentColor;stroke:none}
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.5 6.2A9.8 9.8 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-3 3.9M6.6 6.6A17 17 0 0 0 2 12s3.5 6 10 6a10 10 0 0 0 4.4-1"/></symbol>
   <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M6.2 6.2a8.2 8.2 0 1 0 11.6 0"/></symbol>
+  <symbol id="i-fullscreen" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5 19 12 7 18.5z"/></symbol>
   <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12.5 15H17"/></symbol>
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H4.5L7 16.5A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></symbol>
@@ -712,14 +715,15 @@ svg.icon.filled{fill:currentColor;stroke:none}
   <!-- 导航条 -->
   <nav id="rail">
     <div class="rail-label">战术终端</div>
-    <button class="rail-btn active" data-view="console"><svg class="icon"><use href="#i-terminal"/></svg><span class="txt">主控台</span></button>
-    <button class="rail-btn" data-view="dialogue"><svg class="icon"><use href="#i-chat"/></svg><span class="txt">剧情对话</span></button>
+    <button class="rail-btn" data-view="console"><svg class="icon"><use href="#i-terminal"/></svg><span class="txt">主控台</span></button>
+    <button class="rail-btn active" data-view="dialogue"><svg class="icon"><use href="#i-chat"/></svg><span class="txt">剧情对话</span></button>
     <button class="rail-btn" data-view="roster"><svg class="icon"><use href="#i-users"/></svg><span class="txt">官兵名册</span><span class="badge">10</span></button>
     <button class="rail-btn" data-view="schedule"><svg class="icon"><use href="#i-calendar"/></svg><span class="txt">周程表</span></button>
     <button class="rail-btn" data-view="duty"><svg class="icon"><use href="#i-clipboard"/></svg><span class="txt">我的职责</span></button>
     <button class="rail-btn" data-view="events"><svg class="icon"><use href="#i-flag"/></svg><span class="txt">事件系统</span><span class="badge">13</span></button>
     <div class="rail-foot">
       <button id="btn-settings" title="设置"><svg class="icon"><use href="#i-settings"/></svg></button>
+      <button id="btn-fullscreen" title="全屏模式"><svg class="icon"><use href="#i-fullscreen"/></svg></button>
       <button class="rail-btn" id="btn-back-boot"><svg class="icon"><use href="#i-power"/></svg><span class="txt">退出到主界面</span></button>
       <div class="rail-cred">DISCIPLINE LOCK<br>战术终端 v2.0 · 原型</div>
     </div>
@@ -728,7 +732,7 @@ svg.icon.filled{fill:currentColor;stroke:none}
   <!-- 主内容区 -->
   <main id="stage">
     <!-- 主控台 -->
-    <section class="view on" id="view-console">
+    <section class="view" id="view-console">
       <div class="view-top">
         <div>
           <div class="vk">主控台 · CONSOLE</div>
@@ -779,7 +783,7 @@ svg.icon.filled{fill:currentColor;stroke:none}
     </section>
 
     <!-- 剧情对话 -->
-    <section class="view" id="view-dialogue">
+    <section class="view on" id="view-dialogue">
       <div class="view-top">
         <div>
           <div class="vk">剧情对话 · NARRATIVE</div>
@@ -1373,7 +1377,7 @@ function showView(id){
   var btns = document.querySelectorAll('.rail-btn[data-view]');
   for(var j=0;j<btns.length;j++){ btns[j].classList.toggle('active', btns[j].getAttribute('data-view')===id); }
   window.scrollTo({top:0, behavior:'smooth'});
-  if(id === 'dialogue') renderMvuStatus();
+  if(id === 'dialogue'){ renderMvuStatus(); refreshDialogueFromTavern(); }
 }
 var railBtns = document.querySelectorAll('.rail-btn[data-view]');
 for(var k=0;k<railBtns.length;k++){
@@ -1402,9 +1406,46 @@ function runSelfTest(){
     }
   }, 620);
 }
-runSelfTest();
+/* 开机界面仅在首条消息显示：
+   酒馆环境：getChatMessages() 检测消息数，非首条直接进应用；
+   非酒馆环境：回退 localStorage（已进入过 → 跳过开机） */
+(function initBootState(){
+  var boot = document.getElementById('boot');
+  var app = document.getElementById('app');
+  function skipBoot(){
+    boot.style.display = 'none';
+    app.classList.add('on');
+    startClock();
+    MvuStatus.subscribe();
+  }
+  function checkFirst(){
+    if(typeof getChatMessages === 'function'){
+      try{
+        return getChatMessages().then(function(msgs){
+          return !(msgs && msgs.length > 1);
+        }).catch(function(){ return null; });
+      }catch(e){ return null; }
+    }
+    return null;
+  }
+  var p = checkFirst();
+  if(p && typeof p.then === 'function'){
+    p.then(function(isFirst){
+      if(isFirst === false){ skipBoot(); }
+      else if(isFirst === true){ runSelfTest(); }
+      else{
+        if(localStorage.getItem('wsjls_booted') === '1'){ skipBoot(); }
+        else{ runSelfTest(); }
+      }
+    });
+  }else{
+    if(localStorage.getItem('wsjls_booted') === '1'){ skipBoot(); }
+    else{ runSelfTest(); }
+  }
+})();
 
 function enterApp(){
+  try{ localStorage.setItem('wsjls_booted', '1'); }catch(e){}
   document.getElementById('boot').classList.add('boot-out');
   setTimeout(function(){
     document.getElementById('boot').style.display = 'none';
@@ -1414,6 +1455,7 @@ function enterApp(){
   }, 480);
 }
 function startOnboarding(){
+  try{ localStorage.setItem('wsjls_booted', '1'); }catch(e){}
   document.getElementById('boot').classList.add('boot-out');
   setTimeout(function(){
     document.getElementById('boot').style.display = 'none';
@@ -1429,6 +1471,7 @@ function startOnboarding(){
 document.getElementById('btn-start-new').addEventListener('click', startOnboarding);
 document.getElementById('btn-load').addEventListener('click', enterApp);
 document.getElementById('btn-ob-skip').addEventListener('click', function(){
+  try{ localStorage.setItem('wsjls_booted', '1'); }catch(e){}
   document.getElementById('onboard').classList.remove('on');
   document.getElementById('app').classList.add('on');
   startClock();
@@ -2079,6 +2122,97 @@ renderSchedule();
 renderDuties();
 renderEvents();
 renderSteps();
+
+/* ================= 全屏切换 ================= */
+(function(){
+  var btn = document.getElementById('btn-fullscreen');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    if(!document.fullscreenElement && !document.webkitFullscreenElement){
+      var el = document.documentElement;
+      if(el.requestFullscreen){ el.requestFullscreen(); }
+      else if(el.webkitRequestFullscreen){ el.webkitRequestFullscreen(); }
+    }else{
+      if(document.exitFullscreen){ document.exitFullscreen(); }
+      else if(document.webkitExitFullscreen){ document.webkitExitFullscreen(); }
+    }
+  });
+})();
+
+/* ================= 从酒馆 AI 回复解析 <context>/<option> 标签 ================= */
+function parseAITags(text){
+  var ctx = '', opts = [];
+  // 提取 <context>...</context>
+  var cm = text.match(/<context>([\s\S]*?)<\/context>/i);
+  if(cm) ctx = cm[1].trim();
+  // 提取 <option>...</option>
+  var om = text.match(/<option>([\s\S]*?)<\/option>/i);
+  if(om){
+    var raw = om[1].trim();
+    // 按行分割，提取编号开头的选项
+    var lines = raw.split(/\n/);
+    for(var i=0;i<lines.length;i++){
+      var line = lines[i].trim();
+      if(!line) continue;
+      var m2 = line.match(/^(\d+)\.\s*【(.+?)】(.+)$/);
+      if(m2){
+        opts.push({no: m2[1], cat: m2[2], text: m2[3]});
+      }else{
+        opts.push({no: '', cat: '', text: line});
+      }
+    }
+  }
+  return {context: ctx, options: opts};
+}
+
+/* 从酒馆获取最新 AI 消息并解析标签，刷新对话区 */
+function refreshDialogueFromTavern(){
+  if(!GameBridge.hasTavern()) return;
+  getChatMessages().then(function(msgs){
+    if(!msgs || msgs.length===0) return;
+    // 找最后一条非用户消息
+    var lastAI = '';
+    for(var i=msgs.length-1;i>=0;i--){
+      if(msgs[i].is_user!==true && msgs[i].mes){
+        lastAI = msgs[i].mes;
+        break;
+      }
+    }
+    if(!lastAI) return;
+    var parsed = parseAITags(lastAI);
+    if(!parsed.context && parsed.options.length===0) return;
+    // 更新对话区
+    var log = document.getElementById('msg-log');
+    var html = '';
+    if(parsed.context){
+      html += '<div class="msg"><div class="avatar green">AI</div><div class="bubble"><div class="txt">'+mdLite(parsed.context)+'</div></div></div>';
+    }
+    if(parsed.options.length>0){
+      html += '<div class="msg user"><div class="avatar">你</div><div class="bubble"><div class="who">你 · 列兵 · 钥匙官</div><div class="txt">（你的行动与台词，由你决定。选择下方分支，或直接输入。）</div></div></div>';
+    }
+    log.innerHTML = html;
+    // 更新分支面板
+    if(parsed.options.length>0){
+      var bl = document.getElementById('branch-list');
+      bl.innerHTML = parsed.options.map(function(o,i){
+        var label = o.cat ? '【'+o.cat+'】'+o.text : o.text;
+        return '<button class="branch" data-branch="'+i+'"><span class="bn">'+(o.no||pad2(i+1))+'</span><span>'+label+'</span><span class="b-go">'+icon('chevron-right')+'</span></button>';
+      }).join('');
+      var bs = document.querySelectorAll('#branch-list .branch');
+      for(var i=0;i<bs.length;i++){
+        (function(idx){
+          bs[i].addEventListener('click', function(){
+            var txt = parsed.options[idx].text;
+            GameBridge.setBranch(txt);
+          });
+        })(i);
+      }
+    }
+    renderMvuStatus();
+  }).catch(function(e){
+    console.warn('refreshDialogueFromTavern error:', e);
+  });
+}
 </script>
 </body>
 </html>
