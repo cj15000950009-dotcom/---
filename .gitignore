@@ -1,0 +1,8 @@
+# Python temp scripts
+_*.py
+_*.txt
+_*.html
+
+# Internal dirs
+.claude/
+.playwright-mcp/
