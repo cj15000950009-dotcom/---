@@ -1405,43 +1405,43 @@ function runSelfTest(){
     }
   }, 620);
 }
-/* 开机界面仅在首条消息显示：
-   酒馆环境：getChatMessages() 检测消息数，非首条直接进应用；
-   非酒馆环境：回退 localStorage（已进入过 → 跳过开机） */
-(function initBootState(){
-  var boot = document.getElementById('boot');
-  var app = document.getElementById('app');
-  function skipBoot(){
-    boot.style.display = 'none';
-    app.classList.add('on');
-    startClock();
-    MvuStatus.subscribe();
-  }
-  function checkFirst(){
-    if(typeof getChatMessages === 'function'){
-      try{
-        return getChatMessages().then(function(msgs){
-          return !(msgs && msgs.length > 1);
-        }).catch(function(){ return null; });
-      }catch(e){ return null; }
-    }
-    return null;
-  }
-  var p = checkFirst();
-  if(p && typeof p.then === 'function'){
-    p.then(function(isFirst){
-      if(isFirst === false){ skipBoot(); }
-      else if(isFirst === true){ runSelfTest(); }
-      else{
-        if(localStorage.getItem('wsjls_booted') === '1'){ skipBoot(); }
-        else{ runSelfTest(); }
-      }
-    });
-  }else{
-    if(localStorage.getItem('wsjls_booted') === '1'){ skipBoot(); }
-    else{ runSelfTest(); }
-  }
-})();
+/* 开机界面仅在首条消息显示
+	   优先级：localStorage > 酒馆消息数检测
+	   只要 localStorage 标记已进入过，或酒馆有非首条消息 → 直接进应用 */
+	(function initBootState(){
+	  var boot = document.getElementById('boot');
+	  var app = document.getElementById('app');
+	  function skipBoot(){
+	    boot.style.display = 'none';
+	    app.classList.add('on');
+	    startClock();
+	    MvuStatus.subscribe();
+	  }
+	  // 优先级 1：localStorage 已标记 → 直接进入
+	  if(localStorage.getItem('wsjls_booted') === '1'){
+	    skipBoot();
+	    return;
+	  }
+	  // 优先级 2：检测酒馆消息数（≥1 条消息即非首条）
+	  if(typeof getChatMessages === 'function'){
+	    try{
+	      getChatMessages().then(function(msgs){
+	        if(msgs && msgs.length >= 1){
+	          try{ localStorage.setItem('wsjls_booted', '1'); }catch(e){}
+	          skipBoot();
+	        }else{
+	          runSelfTest();
+	        }
+	      }).catch(function(){
+	        runSelfTest();
+	      });
+	    }catch(e){
+	      runSelfTest();
+	    }
+	  }else{
+	    runSelfTest();
+	  }
+	})();
 
 function enterApp(){
   try{ localStorage.setItem('wsjls_booted', '1'); }catch(e){}

@@ -35,7 +35,7 @@
           "id": "7ad1a95c-1c5e-4531-ae66-bc43014bde05",
           "scriptName": "军营纪律锁_主页_v2",
           "findRegex": "/^/s",
-          "replaceString": "```\n<body>\n<script>\nfetch('https://cdn.jsdelivr.net/gh/cj15000950009-dotcom/---@main/index.html').then(r=>r.text()).then(h=>{\n  var doc=new DOMParser().parseFromString(h,'text/html');\n  var sts=doc.querySelectorAll('style');\n  for(var i=0;i<sts.length;i++){var st=document.createElement('style');st.textContent=sts[i].textContent;document.head.appendChild(st);}\n  document.body.innerHTML=doc.body.innerHTML;\n  var scs=doc.body.querySelectorAll('script');\n  for(var j=0;j<scs.length;j++){var ns=document.createElement('script');if(scs[j].src){ns.src=scs[j].src;}else{ns.textContent=scs[j].textContent;}document.body.appendChild(ns);}\n})\n</script>\n</body>\n```",
+          "replaceString": "```\n<body>\n<script>\n(function(){\n  if(document.getElementById('app')&&document.getElementById('app').classList.contains('on')){return;}\n  fetch('https://cdn.jsdelivr.net/gh/cj15000950009-dotcom/---@main/index.html').then(r=>r.text()).then(h=>{\n    var doc=new DOMParser().parseFromString(h,'text/html');\n    var sts=doc.querySelectorAll('style');\n    for(var i=0;i<sts.length;i++){var st=document.createElement('style');st.textContent=sts[i].textContent;document.head.appendChild(st);}\n    document.body.innerHTML=doc.body.innerHTML;\n    var scs=doc.body.querySelectorAll('script');\n    for(var j=0;j<scs.length;j++){var ns=document.createElement('script');if(scs[j].src){ns.src=scs[j].src;}else{ns.textContent=scs[j].textContent;}document.body.appendChild(ns);}\n  })\n})();\n</script>\n</body>\n```",
           "trimStrings": [],
           "placement": [
             2
@@ -52,7 +52,7 @@
           "id": "23022824-b38c-422e-abbf-5557a799ed55",
           "scriptName": "云端版",
           "findRegex": "/.+/s",
-          "replaceString": "```\n<body>\n<script>\nfetch('https://cdn.jsdelivr.net/gh/cj15000950009-dotcom/---@main/index.html').then(r=>r.text()).then(h=>{\n  var doc=new DOMParser().parseFromString(h,'text/html');\n  var sts=doc.querySelectorAll('style');\n  for(var i=0;i<sts.length;i++){var st=document.createElement('style');st.textContent=sts[i].textContent;document.head.appendChild(st);}\n  document.body.innerHTML=doc.body.innerHTML;\n  var scs=doc.body.querySelectorAll('script');\n  for(var j=0;j<scs.length;j++){var ns=document.createElement('script');if(scs[j].src){ns.src=scs[j].src;}else{ns.textContent=scs[j].textContent;}document.body.appendChild(ns);}\n})\n</script>\n</body>\n```",
+          "replaceString": "```\n<body>\n<script>\n(function(){\n  if(document.getElementById('app')&&document.getElementById('app').classList.contains('on')){return;}\n  fetch('https://cdn.jsdelivr.net/gh/cj15000950009-dotcom/---@main/index.html').then(r=>r.text()).then(h=>{\n    var doc=new DOMParser().parseFromString(h,'text/html');\n    var sts=doc.querySelectorAll('style');\n    for(var i=0;i<sts.length;i++){var st=document.createElement('style');st.textContent=sts[i].textContent;document.head.appendChild(st);}\n    document.body.innerHTML=doc.body.innerHTML;\n    var scs=doc.body.querySelectorAll('script');\n    for(var j=0;j<scs.length;j++){var ns=document.createElement('script');if(scs[j].src){ns.src=scs[j].src;}else{ns.textContent=scs[j].textContent;}document.body.appendChild(ns);}\n  })\n})();\n</script>\n</body>\n```",
           "trimStrings": [],
           "placement": [
             2
