@@ -1,0 +1,39 @@
+============================================================
+正则替换脚本 — 武侦连纪律锁 前端加载器
+导出时间：2026-08-22 23:59
+============================================================
+
+【脚本 1】军营纪律锁_主页_v2（已启用）
+正则匹配：/^/s
+替换内容：
+
+```
+<body>
+<script>
+(function(){
+  if(document.getElementById('app')&&document.getElementById('app').classList.contains('on')){return;}
+  fetch('https://cdn.jsdelivr.net/gh/cj15000950009-dotcom/---@46cfd5a/index.html').then(r=>r.text()).then(h=>{
+    var doc=new DOMParser().parseFromString(h,'text/html');
+    var sts=doc.querySelectorAll('style');
+    for(var i=0;i<sts.length;i++){var st=document.createElement('style');st.textContent=sts[i].textContent;document.head.appendChild(st);}
+    document.body.innerHTML=doc.body.innerHTML;
+    var scs=doc.body.querySelectorAll('script');
+    for(var j=0;j<scs.length;j++){var ns=document.createElement('script');if(scs[j].src){ns.src=scs[j].src;}else{ns.textContent=scs[j].textContent;}document.body.appendChild(ns);}
+  })
+})();
+</script>
+</body>
+```
+
+------------------------------------------------------------
+
+【脚本 2】云端版（已禁用，备用）
+正则匹配：/.+/s
+替换内容：同上
+
+============================================================
+关键改动（v2.1）：
+- CDN URL 改为指定 commit @46cfd5a（绕过 @main 分支缓存）
+- 注入前检测 #app.on 是否已存在，已存在则跳过
+- 开机界面优先检查 localStorage，仅首条消息显示
+============================================================
