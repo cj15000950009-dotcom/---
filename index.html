@@ -253,16 +253,15 @@ svg.icon.filled{fill:currentColor;stroke:none}
 .rail-btn.active svg.icon{color:var(--brass-light)}
 .rail-btn.active::before{display:none}
 .rail-btn .badge{margin-left:2px;font-family:var(--mono);font-size:10px;background:var(--brass);color:#fff;padding:2px 7px;border-radius:999px}
-#rail .rail-foot{margin-left:auto;display:flex;align-items:center;gap:6px;border:none;padding:0}
-#rail .rail-foot #btn-back-boot{padding:10px 13px}
-#rail .rail-foot #btn-fullscreen{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--white);color:var(--ink-3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
-#rail .rail-foot #btn-fullscreen:hover{background:var(--green);color:#fff;border-color:var(--green)}
+#rail .rail-foot{margin-left:auto;display:flex;align-items:center;gap:6px;border:none;padding:0;flex-shrink:0}
+#rail .rail-foot button,
+#rail .rail-foot .rail-btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:9px;border:1px solid var(--line);background:var(--white);color:var(--ink-3);font-size:13.5px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;gap:6px}
+#rail .rail-foot button:hover,
+#rail .rail-foot .rail-btn:hover{background:var(--green);color:#fff;border-color:var(--green)}
+#rail .rail-foot button#btn-settings,
+#rail .rail-foot button#btn-fullscreen{width:36px;padding:0}
+#rail .rail-foot button svg.icon{font-size:17px}
 #rail .rail-cred{display:none}
-
-/* 设置按钮 */
-#btn-settings{padding:10px 13px;color:var(--ink-3);border-radius:9px;transition:all .16s;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600}
-#btn-settings:hover{background:var(--green-tint);color:var(--green-deep)}
-#btn-settings svg.icon{font-size:17px}
 
 /* 设置面板 */
 .settings-grid{display:grid;grid-template-columns:1fr;gap:18px}
@@ -724,7 +723,7 @@ svg.icon.filled{fill:currentColor;stroke:none}
     <div class="rail-foot">
       <button id="btn-settings" title="设置"><svg class="icon"><use href="#i-settings"/></svg></button>
       <button id="btn-fullscreen" title="全屏模式"><svg class="icon"><use href="#i-fullscreen"/></svg></button>
-      <button class="rail-btn" id="btn-back-boot"><svg class="icon"><use href="#i-power"/></svg><span class="txt">退出到主界面</span></button>
+      <button id="btn-back-boot"><svg class="icon"><use href="#i-power"/></svg><span class="txt">退出到主界面</span></button>
       <div class="rail-cred">DISCIPLINE LOCK<br>战术终端 v2.0 · 原型</div>
     </div>
   </nav>
@@ -1150,17 +1149,17 @@ var POSES = [
 var OPENING_OVERVIEW = '三条主线，一把钥匙：交接期跟孙卫东学锁务、器械场给高猛卸锁、营长办公室给贺国栋处理勒伤——换个身份，你永远是那个管着全连命根子的钥匙官。';
 
 var OPENINGS = [
-  {no:'02', swipe:1, title:'新兵下连 · 钥匙官交接', meta:'主线开场 · 孙卫东 · 交接期',
+  {no:'02', swipe:0, title:'新兵下连 · 钥匙官交接', meta:'主线开场 · 孙卫东 · 交接期',
    role:'孙卫东 · 一级军士长 · 四十出头的老光棍锁具行家',
    spot:'憋了两年的中年老男人味 · 交接带教，手把手教你卸锁',
    desc:'新兵连结束，你被分配到武侦连。一纸调令把你推上钥匙官的位置——孙卫东来接你，带你走进锁务室，交到你手上的不只是一把电子钥匙，而是全连每个男人的命根子。',
    branches:['公事公办——翻开台账，按流程登记，一个字不多说。','卖个人情——顺嘴夸一句师傅的手艺，套个近乎。','立威——摆出钥匙官的架子，让孙卫东知道这锁务以后谁说了算。','越线试探——上手动作故意慢半拍，多停留两秒。','追问内幕——问师傅「这锁到底为什么戴」。','装傻充愣——装不懂，让师傅多教几遍。','借机观察——把注意力放在师傅的手法和表情上。','记录细节——把每个兵的锁具编号和「本钱」都记进台账。']},
-  {no:'03', swipe:2, title:'器械场 · 高猛脱手', meta:'日常开场 · 高猛 · 空档期',
+  {no:'03', swipe:1, title:'器械场 · 高猛脱手', meta:'日常开场 · 高猛 · 空档期',
    role:'高猛 · 同年兵 · 体校短跑出身，一身爆发力腱子肉',
    spot:'锁磨伤了裤裆，孙卫东不在 · 私下卸锁，年轻精血攒三周',
    desc:'下连第三周，午后体能训练刚完。高猛光着膀子练单杠脱了手，摔在地上嚎了一嗓子东北腔。钥匙在你兜里，孙卫东不在——兄弟之间的难堪与仗义，从这里开始。',
    branches:['公事公办——按训练伤流程登记，消毒上药，不多话。','调侃他——「体大练短跑的单杠还脱手？丢人啊。」','警告他——别声张，孙卫东不在，不合规矩。','越线多碰——检查伤口时手指多停两秒。','让他自己扶着点——「你手大，自己撑着，我来弄锁」。','问问他——「这锁磨了多久了？」','快速处理——赶紧弄完，别让孙卫东撞见。','记下伤情——回头报备班长罗振海。']},
-  {no:'04', swipe:3, title:'营长办公室 · 贺国栋的勒伤', meta:'权力开场 · 贺国栋 · 人夫/直男',
+  {no:'04', swipe:2, title:'营长办公室 · 贺国栋的勒伤', meta:'权力开场 · 贺国栋 · 人夫/直男',
    role:'贺国栋 · 中校营长 · 人夫/直男，全营最大的官',
    spot:'权力倒挂 · 督导组点名清洁最差，他当面硬了',
    desc:'傍晚被通讯员叫去营部。营长贺国栋端着官腔问了你一堆，才抖出正事：督导组查清洁记录，他的数据最差。他褪下裤子，你蹲下去——全营最大的官，把最软的地方第一次交到你手里。',
