@@ -2117,6 +2117,7 @@ AppSettings.load();
 renderConsole();
 renderQuick();
 renderDialogue();
+refreshDialogueFromTavern(); /* 初次加载时也从酒馆拉取最新 AI 消息，优先 <context>/<option> 标签 */
 renderRoster();
 renderSchedule();
 renderDuties();
@@ -2142,23 +2143,34 @@ renderSteps();
 /* ================= 从酒馆 AI 回复解析 <context>/<option> 标签 ================= */
 function parseAITags(text){
   var ctx = '', opts = [];
-  // 提取 <context>...</context>
-  var cm = text.match(/<context>([\s\S]*?)<\/context>/i);
-  if(cm) ctx = cm[1].trim();
-  // 提取 <option>...</option>
-  var om = text.match(/<option>([\s\S]*?)<\/option>/i);
-  if(om){
-    var raw = om[1].trim();
-    // 按行分割，提取编号开头的选项
-    var lines = raw.split(/\n/);
-    for(var i=0;i<lines.length;i++){
-      var line = lines[i].trim();
-      if(!line) continue;
-      var m2 = line.match(/^(\d+)\.\s*【(.+?)】(.+)$/);
-      if(m2){
-        opts.push({no: m2[1], cat: m2[2], text: m2[3]});
-      }else{
-        opts.push({no: '', cat: '', text: line});
+  // 提取 <context>...</context>（取最后一个，优先离尾部最近的）
+  var cmAll = text.match(/<context>([\s\S]*?)<\/context>/gi);
+  if(cmAll && cmAll.length>0){
+    var cm = cmAll[cmAll.length-1].match(/<context>([\s\S]*?)<\/context>/i);
+    if(cm) ctx = cm[1].trim();
+  }
+  // 提取所有 <option>...</option> 块
+  var omAll = text.match(/<option>([\s\S]*?)<\/option>/gi);
+  if(omAll && omAll.length>0){
+    for(var oi=0;oi<omAll.length;oi++){
+      var inner = omAll[oi].match(/<option>([\s\S]*?)<\/option>/i);
+      if(!inner) continue;
+      var raw = inner[1].trim();
+      var lines = raw.split(/\n/);
+      for(var i=0;i<lines.length;i++){
+        var line = lines[i].trim();
+        if(!line) continue;
+        var m2 = line.match(/^(\d+)\s*[.、]\s*【(.+?)】(.+)$/);
+        if(m2){
+          opts.push({no: m2[1], cat: m2[2], text: m2[3].trim()});
+        }else{
+          var m3 = line.match(/^(\d+)\s*[.、]\s*(.+)$/);
+          if(m3){
+            opts.push({no: m3[1], cat: '', text: m3[2].trim()});
+          }else{
+            opts.push({no: '', cat: '', text: line});
+          }
+        }
       }
     }
   }
